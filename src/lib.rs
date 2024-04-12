@@ -427,7 +427,7 @@ pub struct TimestampingFlags(sys::c_uint);
 )))]
 impl TimestampingFlags {
     #[inline(always)]
-    fn set_flag(&mut self, flag: c_uint, active: bool) {
+    fn set_flag(&mut self, flag: sys::c_uint, active: bool) {
         if active {
             self.0 |= flag;
         } else {
