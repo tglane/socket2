@@ -177,8 +177,6 @@ pub(crate) use libc::IP_RECVTOS;
     target_os = "illumos",
 )))]
 pub(crate) use libc::IP_TOS;
-#[cfg(target_os = "hurd")]
-pub(crate) use libc::SCM_TIMESTAMP as SO_TIMESTAMP;
 #[cfg(not(any(
     target_os = "ios",
     target_os = "macos",

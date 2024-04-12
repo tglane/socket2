@@ -1131,7 +1131,7 @@ impl Socket {
     }
 
     /// TODO
-    #[cfg(not(any(target_os = "redox", target_os = "windows")))]
+    #[cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows")))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamp(&self) -> io::Result<bool> {
         unsafe {
@@ -1141,7 +1141,7 @@ impl Socket {
     }
 
     /// TODO
-    #[cfg(not(any(target_os = "redox", target_os = "windows")))]
+    #[cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows")))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn set_timestamp(&self, active: bool) -> io::Result<()> {
         unsafe {
