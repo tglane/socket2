@@ -36,6 +36,11 @@ use crate::MsgHdrMut;
     target_os = "solaris",
     target_os = "tvos",
     target_os = "watchos",
+    target_os = "windows",
+    target_os = "redox",
+    target_os = "fuchsia",
+    target_os = "vita",
+    target_os = "hurd",
 )))]
 use crate::TimestampingFlags;
 use crate::{Domain, Protocol, SockAddr, TcpKeepalive, Type};
@@ -1165,6 +1170,9 @@ impl Socket {
         target_os = "watchos",
         target_os = "windows",
         target_os = "redox",
+        target_os = "fuchsia",
+        target_os = "vita",
+        target_os = "hurd",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamp_ns(&self) -> io::Result<bool> {
@@ -1190,6 +1198,9 @@ impl Socket {
         target_os = "watchos",
         target_os = "windows",
         target_os = "redox",
+        target_os = "fuchsia",
+        target_os = "vita",
+        target_os = "hurd",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn set_timestamp_ns(&self, active: bool) -> io::Result<()> {
@@ -1219,12 +1230,15 @@ impl Socket {
         target_os = "watchos",
         target_os = "windows",
         target_os = "redox",
+        target_os = "fuchsia",
+        target_os = "vita",
+        target_os = "hurd",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamping(&self) -> io::Result<TimestampingFlags> {
         unsafe {
-            getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
-                .map(|flags| TimestampingFlags(flags))
+            getsockopt::<sys::c_uint>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
+                .map(TimestampingFlags)
         }
     }
 
@@ -1244,6 +1258,9 @@ impl Socket {
         target_os = "watchos",
         target_os = "windows",
         target_os = "redox",
+        target_os = "fuchsia",
+        target_os = "vita",
+        target_os = "hurd",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn set_timestamping(&self, flags: TimestampingFlags) -> io::Result<()> {

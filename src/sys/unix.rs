@@ -75,6 +75,25 @@ use crate::{Domain, Protocol, SockAddr, TcpKeepalive, Type};
 use crate::{MsgHdr, MsgHdrMut, RecvFlags};
 
 pub(crate) use libc::c_int;
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+    target_os = "redox",
+    target_os = "fuchsia",
+    target_os = "vita",
+    target_os = "hurd",
+)))]
+pub(crate) use libc::c_uint;
 
 // Used in `Domain`.
 pub(crate) use libc::{AF_INET, AF_INET6, AF_UNIX};
@@ -240,8 +259,17 @@ pub(crate) use libc::{
     target_os = "solaris",
     target_os = "tvos",
     target_os = "watchos",
+    target_os = "redox",
+    target_os = "fuchsia",
+    target_os = "vita",
+    target_os = "hurd",
 )))]
-pub(crate) use libc::{SO_TIMESTAMPING, SO_TIMESTAMPNS};
+pub(crate) use libc::{
+    SOF_TIMESTAMPING_RAW_HARDWARE, SOF_TIMESTAMPING_RX_HARDWARE, SOF_TIMESTAMPING_RX_SOFTWARE,
+    SOF_TIMESTAMPING_SOFTWARE, SOF_TIMESTAMPING_SYS_HARDWARE, SOF_TIMESTAMPING_TX_ACK,
+    SOF_TIMESTAMPING_TX_HARDWARE, SOF_TIMESTAMPING_TX_SCHED, SOF_TIMESTAMPING_TX_SOFTWARE,
+    SO_TIMESTAMPING, SO_TIMESTAMPNS,
+};
 #[cfg(all(
     feature = "all",
     any(
