@@ -23,6 +23,21 @@ use std::time::Duration;
 use crate::sys::{self, c_int, getsockopt, setsockopt, Bool};
 #[cfg(all(unix, not(target_os = "redox")))]
 use crate::MsgHdrMut;
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+)))]
+use crate::TimestampingFlags;
 use crate::{Domain, Protocol, SockAddr, TcpKeepalive, Type};
 #[cfg(not(target_os = "redox"))]
 use crate::{MaybeUninitSlice, MsgHdr, RecvFlags};
@@ -1108,6 +1123,138 @@ impl Socket {
     /// indefinitely.
     pub fn set_write_timeout(&self, duration: Option<Duration>) -> io::Result<()> {
         sys::set_timeout_opt(self.as_raw(), sys::SOL_SOCKET, sys::SO_SNDTIMEO, duration)
+    }
+
+    /// TODO
+    #[cfg(not(any(target_os = "redox", target_os = "windows")))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn timestamp(&self) -> io::Result<bool> {
+        unsafe {
+            getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMP)
+                .map(|active| active != 0)
+        }
+    }
+
+    /// TODO
+    #[cfg(not(any(target_os = "redox", target_os = "windows")))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn set_timestamp(&self, active: bool) -> io::Result<()> {
+        unsafe {
+            setsockopt(
+                self.as_raw(),
+                sys::SOL_SOCKET,
+                sys::SO_TIMESTAMP,
+                active as c_int,
+            )
+        }
+    }
+
+    /// TODO
+    #[cfg(not(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "haiku",
+        target_os = "illumos",
+        target_os = "ios",
+        target_os = "macos",
+        target_os = "netbsd",
+        target_os = "nto",
+        target_os = "openbsd",
+        target_os = "solaris",
+        target_os = "tvos",
+        target_os = "watchos",
+        target_os = "windows",
+        target_os = "redox",
+    )))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn timestamp_ns(&self) -> io::Result<bool> {
+        unsafe {
+            getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPNS)
+                .map(|active| active != 0)
+        }
+    }
+
+    /// TODO
+    #[cfg(not(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "haiku",
+        target_os = "illumos",
+        target_os = "ios",
+        target_os = "macos",
+        target_os = "netbsd",
+        target_os = "nto",
+        target_os = "openbsd",
+        target_os = "solaris",
+        target_os = "tvos",
+        target_os = "watchos",
+        target_os = "windows",
+        target_os = "redox",
+    )))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn set_timestamp_ns(&self, active: bool) -> io::Result<()> {
+        unsafe {
+            setsockopt(
+                self.as_raw(),
+                sys::SOL_SOCKET,
+                sys::SO_TIMESTAMPNS,
+                active as c_int,
+            )
+        }
+    }
+
+    /// TODO
+    #[cfg(not(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "haiku",
+        target_os = "illumos",
+        target_os = "ios",
+        target_os = "macos",
+        target_os = "netbsd",
+        target_os = "nto",
+        target_os = "openbsd",
+        target_os = "solaris",
+        target_os = "tvos",
+        target_os = "watchos",
+        target_os = "windows",
+        target_os = "redox",
+    )))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn timestamping(&self) -> io::Result<TimestampingFlags> {
+        unsafe {
+            getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
+                .map(|flags| TimestampingFlags(flags))
+        }
+    }
+
+    /// TODO
+    #[cfg(not(any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "haiku",
+        target_os = "illumos",
+        target_os = "ios",
+        target_os = "macos",
+        target_os = "netbsd",
+        target_os = "nto",
+        target_os = "openbsd",
+        target_os = "solaris",
+        target_os = "tvos",
+        target_os = "watchos",
+        target_os = "windows",
+        target_os = "redox",
+    )))]
+    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    pub fn set_timestamping(&self, flags: TimestampingFlags) -> io::Result<()> {
+        unsafe {
+            setsockopt(
+                self.as_raw(),
+                sys::SOL_SOCKET,
+                sys::SO_TIMESTAMPING,
+                flags.0,
+            )
+        }
     }
 }
 

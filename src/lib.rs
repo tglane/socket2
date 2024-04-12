@@ -383,6 +383,89 @@ impl RecvFlags {
     }
 }
 
+/// TODO
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+    target_os = "windows",
+    target_os = "redox",
+)))]
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct TimestampingFlags(c_int);
+
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+    target_os = "windows",
+    target_os = "redox",
+)))]
+impl TimestampingFlags {
+    #[inline(always)]
+    const fn set_flag(&mut self, flag: c_int, active: bool) {
+        if active {
+            self.0 |= flag;
+        } else {
+            self.0 &= !flag;
+        }
+    }
+
+    pub const fn set_rx_hardware_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RX_HARDWARE, active)
+    }
+
+    pub const fn add_rx_software_gen(&mut self) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RX_SOFTWARE, active)
+    }
+
+    pub const fn add_tx_hardware_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_HARDWARE, active)
+    }
+
+    pub const fn add_tx_software_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_SOFTWARE, active)
+    }
+
+    pub const fn add_tx_sched_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_SCHED, active)
+    }
+
+    pub const fn add_tx_ack_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_ACK, active)
+    }
+
+    pub const fn add_software_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_SOFTWARE, active)
+    }
+
+    pub const fn add_sys_hardware_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_SYS_HARDWARE, active)
+    }
+
+    pub const fn add_raw_hardware_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RAW_HARDWARE, active)
+    }
+}
+
 /// A version of [`IoSliceMut`] that allows the buffer to be uninitialised.
 ///
 /// [`IoSliceMut`]: std::io::IoSliceMut
