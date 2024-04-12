@@ -400,7 +400,7 @@ impl RecvFlags {
     target_os = "windows",
     target_os = "redox",
 )))]
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
 pub struct TimestampingFlags(c_int);
 
 #[cfg(not(any(
@@ -421,7 +421,7 @@ pub struct TimestampingFlags(c_int);
 )))]
 impl TimestampingFlags {
     #[inline(always)]
-    const fn set_flag(&mut self, flag: c_int, active: bool) {
+    fn set_flag(&mut self, flag: c_int, active: bool) {
         if active {
             self.0 |= flag;
         } else {
@@ -429,40 +429,49 @@ impl TimestampingFlags {
         }
     }
 
-    pub const fn set_rx_hardware_gen(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_RX_HARDWARE, active)
+    /// TODO
+    pub fn set_rx_hardware_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RX_HARDWARE as c_int, active)
     }
 
-    pub const fn add_rx_software_gen(&mut self) {
-        self.set_flag(libc::SOF_TIMESTAMPING_RX_SOFTWARE, active)
+    /// TODO
+    pub fn add_rx_software_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RX_SOFTWARE as c_int, active)
     }
 
-    pub const fn add_tx_hardware_gen(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_TX_HARDWARE, active)
+    /// TODO
+    pub fn add_tx_hardware_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_HARDWARE as c_int, active)
     }
 
-    pub const fn add_tx_software_gen(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_TX_SOFTWARE, active)
+    /// TODO
+    pub fn add_tx_software_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_SOFTWARE as c_int, active)
     }
 
-    pub const fn add_tx_sched_gen(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_TX_SCHED, active)
+    /// TODO
+    pub fn add_tx_sched_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_SCHED as c_int, active)
     }
 
-    pub const fn add_tx_ack_gen(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_TX_ACK, active)
+    /// TODO
+    pub fn add_tx_ack_gen(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_TX_ACK as c_int, active)
     }
 
-    pub const fn add_software_reporting(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_SOFTWARE, active)
+    /// TODO
+    pub fn add_software_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_SOFTWARE as c_int, active)
     }
 
-    pub const fn add_sys_hardware_reporting(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_SYS_HARDWARE, active)
+    /// TODO
+    pub fn add_sys_hardware_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_SYS_HARDWARE as c_int, active)
     }
 
-    pub const fn add_raw_hardware_reporting(&mut self, active: bool) {
-        self.set_flag(libc::SOF_TIMESTAMPING_RAW_HARDWARE, active)
+    /// TODO
+    pub fn add_raw_hardware_reporting(&mut self, active: bool) {
+        self.set_flag(libc::SOF_TIMESTAMPING_RAW_HARDWARE as c_int, active)
     }
 }
 
