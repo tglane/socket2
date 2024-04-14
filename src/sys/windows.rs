@@ -717,8 +717,7 @@ pub(crate) fn set_timeout_opt(
 /// Wrapper around `WSAIoctl` to deal with platfrom specific timestamping option
 pub(crate) fn set_timestamping_opt(socket: Socket, flags: TimestampingFlags) -> io::Result<()> {
     let mut out = 0;
-
-    let config = TIMESTAMPING_CONFIG {
+    let mut config = TIMESTAMPING_CONFIG {
         Flags: flags.0 as u32,
         TxTimestampsBuffered: 0,
     };
