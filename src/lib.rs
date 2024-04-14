@@ -424,10 +424,6 @@ pub struct TimestampingFlags(sys::c_uint);
     target_os = "hurd",
 )))]
 impl TimestampingFlags {
-    pub fn new() -> Self {
-        Self(0)
-    }
-
     /// TODO
     #[cfg(target_os = "windows")]
     pub fn set_rx(&mut self, active: bool) {

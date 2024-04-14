@@ -1386,7 +1386,7 @@ test!(timestamp_ns, set_timestamp_ns(true));
     target_os = "hurd",
 )))]
 fn test_timestamping() {
-    let mut t_flags = TimestampingFlags::new();
+    let mut t_flags = TimestampingFlags(0);
     #[cfg(target_os = "windows")]
     t_flags.set_rx(true);
     #[cfg(not(target_os = "windows"))]
