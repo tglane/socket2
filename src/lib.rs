@@ -181,6 +181,7 @@ mod sys;
 #[cfg(not(any(windows, unix)))]
 compile_error!("Socket2 doesn't support the compile target");
 
+use libc::ACCOUNTING;
 use sys::c_int;
 
 pub use sockaddr::SockAddr;
@@ -493,6 +494,48 @@ impl TimestampingFlags {
     #[cfg(not(target_os = "windows"))]
     pub fn set_raw_hardware_reporting(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_RAW_HARDWARE, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_id(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_ID, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_id_tcp(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_ID_TCP, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_cmsg(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_CMSG, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_tsonly(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_TSONLY, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_stats(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_STATS, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_pktinfo(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_PKTINFO, active)
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_opt_tx_swhw(&mut self, active: bool) {
+        self.set_flag(sys::SOF_TIMESTAMPING_OPT_TX_SWHW, active)
     }
 
     #[inline(always)]
