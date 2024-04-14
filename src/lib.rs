@@ -397,7 +397,6 @@ impl RecvFlags {
     target_os = "solaris",
     target_os = "tvos",
     target_os = "watchos",
-    target_os = "windows",
     target_os = "redox",
     target_os = "fuchsia",
     target_os = "vita",
@@ -419,7 +418,6 @@ pub struct TimestampingFlags(sys::c_uint);
     target_os = "solaris",
     target_os = "tvos",
     target_os = "watchos",
-    target_os = "windows",
     target_os = "redox",
     target_os = "fuchsia",
     target_os = "vita",
@@ -436,47 +434,68 @@ impl TimestampingFlags {
     }
 
     /// TODO
+    #[cfg(target_os = "windows")]
+    pub fn set_rx(&mut self, active: bool) {
+        self.set_flag(sys::TIMESTAMPING_FLAG_RX, active);
+    }
+
+    /// TODO
+    #[cfg(target_os = "windows")]
+    pub fn set_tx(&mut self, active: bool) {
+        self.set_flag(sys::TIMESTAMPING_FLAG_TX, active);
+    }
+
+    /// TODO
+    #[cfg(not(target_os = "windows"))]
     pub fn set_rx_hardware_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_RX_HARDWARE, active)
     }
 
     /// TODO
-    pub fn add_rx_software_gen(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_rx_software_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_RX_SOFTWARE, active)
     }
 
     /// TODO
-    pub fn add_tx_hardware_gen(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_tx_hardware_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_TX_HARDWARE, active)
     }
 
     /// TODO
-    pub fn add_tx_software_gen(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_tx_software_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_TX_SOFTWARE, active)
     }
 
     /// TODO
-    pub fn add_tx_sched_gen(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_tx_sched_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_TX_SCHED, active)
     }
 
     /// TODO
-    pub fn add_tx_ack_gen(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_tx_ack_gen(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_TX_ACK, active)
     }
 
     /// TODO
-    pub fn add_software_reporting(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_software_reporting(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_SOFTWARE, active)
     }
 
     /// TODO
-    pub fn add_sys_hardware_reporting(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_sys_hardware_reporting(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_SYS_HARDWARE, active)
     }
 
     /// TODO
-    pub fn add_raw_hardware_reporting(&mut self, active: bool) {
+    #[cfg(not(target_os = "windows"))]
+    pub fn set_raw_hardware_reporting(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_RAW_HARDWARE, active)
     }
 }

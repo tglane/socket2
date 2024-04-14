@@ -1168,11 +1168,11 @@ impl Socket {
         target_os = "solaris",
         target_os = "tvos",
         target_os = "watchos",
-        target_os = "windows",
         target_os = "redox",
         target_os = "fuchsia",
         target_os = "vita",
         target_os = "hurd",
+        target_os = "windows",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamp_ns(&self) -> io::Result<bool> {
@@ -1196,11 +1196,11 @@ impl Socket {
         target_os = "solaris",
         target_os = "tvos",
         target_os = "watchos",
-        target_os = "windows",
         target_os = "redox",
         target_os = "fuchsia",
         target_os = "vita",
         target_os = "hurd",
+        target_os = "windows",
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn set_timestamp_ns(&self, active: bool) -> io::Result<()> {
@@ -1228,18 +1228,15 @@ impl Socket {
         target_os = "solaris",
         target_os = "tvos",
         target_os = "watchos",
-        target_os = "windows",
         target_os = "redox",
         target_os = "fuchsia",
         target_os = "vita",
         target_os = "hurd",
+        target_os = "windows"
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamping(&self) -> io::Result<TimestampingFlags> {
-        unsafe {
-            getsockopt::<sys::c_uint>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
-                .map(TimestampingFlags)
-        }
+        sys::timestamping_opt(self.as_raw())
     }
 
     /// TODO
@@ -1256,7 +1253,6 @@ impl Socket {
         target_os = "solaris",
         target_os = "tvos",
         target_os = "watchos",
-        target_os = "windows",
         target_os = "redox",
         target_os = "fuchsia",
         target_os = "vita",
@@ -1264,14 +1260,7 @@ impl Socket {
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn set_timestamping(&self, flags: TimestampingFlags) -> io::Result<()> {
-        unsafe {
-            setsockopt(
-                self.as_raw(),
-                sys::SOL_SOCKET,
-                sys::SO_TIMESTAMPING,
-                flags.0,
-            )
-        }
+        sys::set_timestamping_opt(self.as_raw(), flags)
     }
 }
 
