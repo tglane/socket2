@@ -1129,9 +1129,16 @@ impl Socket {
         sys::set_timeout_opt(self.as_raw(), sys::SOL_SOCKET, sys::SO_SNDTIMEO, duration)
     }
 
-    /// TODO
+    /// Get value for `SO_TIMESTAMP` option on this socket.
+    ///
+    /// For more information about this option, see [`set_timestamp`].
+    ///
+    /// [`set_timestamp`]: Socket::set_timestamp
     #[cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows")))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows"))))
+    )]
     pub fn timestamp(&self) -> io::Result<bool> {
         unsafe {
             getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMP)
@@ -1139,9 +1146,19 @@ impl Socket {
         }
     }
 
-    /// TODO
+    /// Set value for the `SO_TIMESTAMP` option on this socket.
+    ///
+    /// This indicates that timestamps should be generated for each incoming
+    /// packet in system time. The timestamp is reported via [`recvmsg`]. The
+    /// timestamp is represented by a `timeval`.
+    ///
+    /// Additional documentation can be found in documentation of the OS.
+    /// * Linux: <https://docs.kernel.org/networking/timestamping.html>
     #[cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows")))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows"))))
+    )]
     pub fn set_timestamp(&self, active: bool) -> io::Result<()> {
         unsafe {
             setsockopt(
@@ -1153,7 +1170,11 @@ impl Socket {
         }
     }
 
-    /// TODO
+    /// Get value for `SO_TIMESTAMPNS` option on this socket.
+    ///
+    /// For more information about this option, see [`set_timestamp_ns`].
+    ///
+    /// [`set_timestamp_ns`]: Socket::set_timestamp_ns
     #[cfg(not(any(
         target_os = "dragonfly",
         target_os = "freebsd",
@@ -1173,7 +1194,28 @@ impl Socket {
         target_os = "hurd",
         target_os = "windows",
     )))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "haiku",
+            target_os = "illumos",
+            target_os = "ios",
+            target_os = "macos",
+            target_os = "netbsd",
+            target_os = "nto",
+            target_os = "openbsd",
+            target_os = "solaris",
+            target_os = "tvos",
+            target_os = "watchos",
+            target_os = "redox",
+            target_os = "fuchsia",
+            target_os = "vita",
+            target_os = "hurd",
+            target_os = "windows",
+        ))))
+    )]
     pub fn timestamp_ns(&self) -> io::Result<bool> {
         unsafe {
             getsockopt::<c_int>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPNS)
@@ -1181,7 +1223,14 @@ impl Socket {
         }
     }
 
-    /// TODO
+    /// Set value for the `SO_TIMESTAMPNS` option on this socket.
+    ///
+    /// This indicates that timestamps should be generated for each incoming
+    /// packet in system time. The timestamp is reported via [`recvmsg`]. The
+    /// timestamp is represented by a `timespec` with nsec resolution.
+    ///
+    /// Additional documentation can be found in documentation of the OS.
+    /// * Linux: <https://docs.kernel.org/networking/timestamping.html>
     #[cfg(not(any(
         target_os = "dragonfly",
         target_os = "freebsd",
@@ -1201,7 +1250,28 @@ impl Socket {
         target_os = "hurd",
         target_os = "windows",
     )))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "haiku",
+            target_os = "illumos",
+            target_os = "ios",
+            target_os = "macos",
+            target_os = "netbsd",
+            target_os = "nto",
+            target_os = "openbsd",
+            target_os = "solaris",
+            target_os = "tvos",
+            target_os = "watchos",
+            target_os = "redox",
+            target_os = "fuchsia",
+            target_os = "vita",
+            target_os = "hurd",
+            target_os = "windows",
+        ))))
+    )]
     pub fn set_timestamp_ns(&self, active: bool) -> io::Result<()> {
         unsafe {
             setsockopt(
@@ -1213,7 +1283,13 @@ impl Socket {
         }
     }
 
-    /// TODO
+    /// On Unix this gets the value for the `SO_TIMESTAMPING` options and on
+    /// Windows this gets the value for the `SOI_TIMESTAMPING` option on this
+    /// socket.
+    ///
+    /// For more information about this option, see [`set_timestamping`].
+    ///
+    /// [`set_timestamping`]: Socket::set_timestamping
     #[cfg(not(any(
         target_os = "dragonfly",
         target_os = "freebsd",
@@ -1233,7 +1309,28 @@ impl Socket {
         target_os = "hurd",
         target_os = "windows"
     )))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "haiku",
+            target_os = "illumos",
+            target_os = "ios",
+            target_os = "macos",
+            target_os = "netbsd",
+            target_os = "nto",
+            target_os = "openbsd",
+            target_os = "solaris",
+            target_os = "tvos",
+            target_os = "watchos",
+            target_os = "redox",
+            target_os = "fuchsia",
+            target_os = "vita",
+            target_os = "hurd",
+            target_os = "windows",
+        ))))
+    )]
     pub fn timestamping(&self) -> io::Result<TimestampingFlags> {
         unsafe {
             getsockopt::<sys::c_uint>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
@@ -1241,7 +1338,19 @@ impl Socket {
         }
     }
 
-    /// TODO
+    /// On Unix this sets the value for the `SO_TIMESTAMPING` options and on
+    /// Windows this sets the value for the `SOI_TIMESTAMPING` option on this
+    /// socket.
+    ///
+    /// With this timestamps can be configured to be generated on reception,
+    /// transmission or both. It supports hardware and software sources for
+    /// timestamp generation and it also allows generating timestamps for
+    /// stream sockets. The configuration depends on the flags that are set on
+    /// the input parameter of type [`TimestampingFlags`].
+    ///
+    /// Additional documentation can be found in documentation of the OS.
+    /// * Linux: <https://docs.kernel.org/networking/timestamping.html>
+    /// * Windows: <https://learn.microsoft.com/en-us/windows/win32/winsock/winsock-timestamping>
     #[cfg(not(any(
         target_os = "dragonfly",
         target_os = "freebsd",
@@ -1260,7 +1369,27 @@ impl Socket {
         target_os = "vita",
         target_os = "hurd",
     )))]
-    #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(not(any(
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "haiku",
+            target_os = "illumos",
+            target_os = "ios",
+            target_os = "macos",
+            target_os = "netbsd",
+            target_os = "nto",
+            target_os = "openbsd",
+            target_os = "solaris",
+            target_os = "tvos",
+            target_os = "watchos",
+            target_os = "redox",
+            target_os = "fuchsia",
+            target_os = "vita",
+            target_os = "hurd",
+        ))))
+    )]
     pub fn set_timestamping(&self, flags: TimestampingFlags) -> io::Result<()> {
         sys::set_timestamping_opt(self.as_raw(), flags)
     }
