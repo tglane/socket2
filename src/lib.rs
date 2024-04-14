@@ -402,7 +402,7 @@ impl RecvFlags {
     target_os = "vita",
     target_os = "hurd",
 )))]
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Default, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct TimestampingFlags(sys::c_uint);
 
 #[cfg(not(any(
@@ -424,6 +424,11 @@ pub struct TimestampingFlags(sys::c_uint);
     target_os = "hurd",
 )))]
 impl TimestampingFlags {
+    /// TODO
+    pub fn new() -> Self {
+        Self(0)
+    }
+
     /// TODO
     #[cfg(target_os = "windows")]
     pub fn set_rx(&mut self, active: bool) {
