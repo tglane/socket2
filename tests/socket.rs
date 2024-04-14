@@ -55,6 +55,7 @@ use windows_sys::Win32::Foundation::{GetHandleInformation, HANDLE_FLAG_INHERIT};
 use socket2::MaybeUninitSlice;
 #[cfg(not(target_os = "vita"))]
 use socket2::TcpKeepalive;
+use socket2::TimestampingFlags;
 use socket2::{Domain, Protocol, SockAddr, Socket, Type};
 
 #[test]
@@ -1322,6 +1323,68 @@ const SET_BUF_SIZE: usize = 4096;
 const GET_BUF_SIZE: usize = SET_BUF_SIZE;
 #[cfg(target_os = "linux")]
 const GET_BUF_SIZE: usize = 2 * SET_BUF_SIZE;
+
+#[cfg(not(any(target_os = "redox", target_os = "hurd", target_os = "windows")))]
+test!(timestamp, set_timestamp(true));
+
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+    target_os = "redox",
+    target_os = "fuchsia",
+    target_os = "vita",
+    target_os = "hurd",
+    target_os = "windows",
+)))]
+test!(timestamp_ns, set_timestamp_ns(true));
+
+#[test]
+#[cfg(not(any(
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "haiku",
+    target_os = "illumos",
+    target_os = "ios",
+    target_os = "macos",
+    target_os = "netbsd",
+    target_os = "nto",
+    target_os = "openbsd",
+    target_os = "solaris",
+    target_os = "tvos",
+    target_os = "watchos",
+    target_os = "redox",
+    target_os = "fuchsia",
+    target_os = "vita",
+    target_os = "hurd",
+)))]
+fn test_timestamping() {
+    let mut t_flags = TimestampingFlags::new();
+    #[cfg(target_os = "windows")]
+    t_flags.set_rx(true);
+    #[cfg(not(target_os = "windows"))]
+    t_flags.set_rx_software_gen(true);
+
+    let socket = Socket::new(Domain::IPV4, Type::DGRAM, None).unwrap();
+    socket.set_timestamping(t_flags).unwrap();
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        // Windows socket api does not support getting the currently set flags
+        // for timestamping so we only query this on supported unix systems
+        let queried_t_flags = socket.timestamping().unwrap();
+        assert_eq!(t_flags, queried_t_flags);
+    }
+}
 
 test!(nodelay, set_nodelay(true));
 test!(

@@ -424,13 +424,8 @@ pub struct TimestampingFlags(sys::c_uint);
     target_os = "hurd",
 )))]
 impl TimestampingFlags {
-    #[inline(always)]
-    fn set_flag(&mut self, flag: sys::c_uint, active: bool) {
-        if active {
-            self.0 |= flag;
-        } else {
-            self.0 &= !flag;
-        }
+    pub fn new() -> Self {
+        Self(0)
     }
 
     /// TODO
@@ -497,6 +492,15 @@ impl TimestampingFlags {
     #[cfg(not(target_os = "windows"))]
     pub fn set_raw_hardware_reporting(&mut self, active: bool) {
         self.set_flag(sys::SOF_TIMESTAMPING_RAW_HARDWARE, active)
+    }
+
+    #[inline(always)]
+    fn set_flag(&mut self, flag: sys::c_uint, active: bool) {
+        if active {
+            self.0 |= flag;
+        } else {
+            self.0 &= !flag;
+        }
     }
 }
 
