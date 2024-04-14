@@ -25,7 +25,7 @@ use windows_sys::Win32::Networking::WinSock::SO_PROTOCOL_INFOW;
 use windows_sys::Win32::Networking::WinSock::{
     self, tcp_keepalive, FIONBIO, IN6_ADDR, IN6_ADDR_0, INVALID_SOCKET, IN_ADDR, IN_ADDR_0,
     POLLERR, POLLHUP, POLLRDNORM, POLLWRNORM, SD_BOTH, SD_RECEIVE, SD_SEND, SIO_KEEPALIVE_VALS,
-    SIO_KEEPALIVE_VALS, SOCKET_ERROR, TIMESTAMP_CONFIG, WSABUF, WSAEMSGSIZE, WSAESHUTDOWN,
+    SIO_TIMESTAMPING, SOCKET_ERROR, TIMESTAMPING_CONFIG, WSABUF, WSAEMSGSIZE, WSAESHUTDOWN,
     WSAPOLLFD, WSAPROTOCOL_INFOW, WSA_FLAG_NO_HANDLE_INHERIT, WSA_FLAG_OVERLAPPED,
 };
 use windows_sys::Win32::System::Threading::INFINITE;
@@ -34,6 +34,8 @@ use crate::{MsgHdr, RecvFlags, SockAddr, TcpKeepalive, TimestampingFlags, Type};
 
 #[allow(non_camel_case_types)]
 pub(crate) type c_int = std::os::raw::c_int;
+#[allow(non_camel_case_types)]
+pub(crate) type c_int = std::os::raw::c_uint;
 
 /// Fake MSG_TRUNC flag for the [`RecvFlags`] struct.
 ///
@@ -716,8 +718,8 @@ pub(crate) fn set_timeout_opt(
 pub(crate) fn set_timestamping_opt(socket: Socket, flags: TimestampingFlags) -> io::Result<()> {
     let mut out = 0;
 
-    let config = TIMESTAMP_CONFIG {
-        Flags: 0,
+    let config = TIMESTAMPING_CONFIG {
+        Flags: flags.0 as u32,
         TxTimestampsBuffered: 0,
     };
 
@@ -726,7 +728,7 @@ pub(crate) fn set_timestamping_opt(socket: Socket, flags: TimestampingFlags) -> 
             socket,
             SIO_TIMESTAMPING,
             &mut config as *mut _ as *mut _,
-            size_of::<TIMESTAMP_CONFIG>() as _,
+            size_of::<TIMESTAMPING_CONFIG>() as _,
             ptr::null_mut(),
             0,
             &mut out,

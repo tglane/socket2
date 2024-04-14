@@ -36,7 +36,6 @@ use crate::MsgHdrMut;
     target_os = "solaris",
     target_os = "tvos",
     target_os = "watchos",
-    target_os = "windows",
     target_os = "redox",
     target_os = "fuchsia",
     target_os = "vita",
@@ -1236,7 +1235,10 @@ impl Socket {
     )))]
     #[cfg_attr(docsrs, doc(cfg(not(target_os = "redox"))))]
     pub fn timestamping(&self) -> io::Result<TimestampingFlags> {
-        sys::timestamping_opt(self.as_raw())
+        unsafe {
+            getsockopt::<sys::c_uint>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
+                .map(TimestampingFlags)
+        }
     }
 
     /// TODO

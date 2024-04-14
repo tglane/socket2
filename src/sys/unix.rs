@@ -1258,32 +1258,6 @@ fn into_timeval(duration: Option<Duration>) -> libc::timeval {
     }
 }
 
-/// Wrapper around `getsockopt` to deal with platfrom specific timestamping option
-#[cfg(not(any(
-    target_os = "dragonfly",
-    target_os = "freebsd",
-    target_os = "haiku",
-    target_os = "illumos",
-    target_os = "ios",
-    target_os = "macos",
-    target_os = "netbsd",
-    target_os = "nto",
-    target_os = "openbsd",
-    target_os = "solaris",
-    target_os = "tvos",
-    target_os = "watchos",
-    target_os = "redox",
-    target_os = "fuchsia",
-    target_os = "vita",
-    target_os = "hurd",
-)))]
-pub(crate) fn timestamping_opt(fd: Socket) -> io::Result<TimestampingFlags> {
-    unsafe {
-        getsockopt::<sys::c_uint>(self.as_raw(), sys::SOL_SOCKET, sys::SO_TIMESTAMPING)
-            .map(TimestampingFlags)
-    }
-}
-
 /// Wrapper around `setsockopt` to deal with platfrom specific timestamping option
 #[cfg(not(any(
     target_os = "dragonfly",
