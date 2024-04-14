@@ -35,7 +35,7 @@ use crate::{MsgHdr, RecvFlags, SockAddr, TcpKeepalive, TimestampingFlags, Type};
 #[allow(non_camel_case_types)]
 pub(crate) type c_int = std::os::raw::c_int;
 #[allow(non_camel_case_types)]
-pub(crate) type c_int = std::os::raw::c_uint;
+pub(crate) type c_uint = std::os::raw::c_uint;
 
 /// Fake MSG_TRUNC flag for the [`RecvFlags`] struct.
 ///
