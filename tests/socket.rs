@@ -55,7 +55,10 @@ use windows_sys::Win32::Foundation::{GetHandleInformation, HANDLE_FLAG_INHERIT};
 use socket2::MaybeUninitSlice;
 #[cfg(not(target_os = "vita"))]
 use socket2::TcpKeepalive;
-#[cfg(any(target_os = "linux", target_os = "android", target_os = "windows"))]
+#[cfg(all(
+    feature = "all",
+    any(target_os = "linux", target_os = "android", target_os = "windows")
+))]
 use socket2::TimestampingFlags;
 use socket2::{Domain, Protocol, SockAddr, Socket, Type};
 
