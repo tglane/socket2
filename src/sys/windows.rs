@@ -715,6 +715,8 @@ pub(crate) fn set_timeout_opt(
 }
 
 /// Wrapper around `WSAIoctl` to deal with platfrom specific timestamping option
+#[cfg(feature = "all")]
+#[cfg_attr(docsrs, doc(cfg(all(windows, feature = "all"))))]
 pub(crate) fn set_timestamping_opt(socket: Socket, flags: TimestampingFlags) -> io::Result<()> {
     let mut out = 0;
     let mut config = TIMESTAMPING_CONFIG {
